@@ -6,11 +6,12 @@ import skimage.morphology as morph
 import skimage.filters as filters
 import skimage.exposure as exposure
 import xlsxwriter as xls
-from skimage.feature import greycomatrix, greycoprops
+from skimage.feature import graycomatrix, graycoprops
+import skimage.feature as feature
 import os
 
-path_dataset = "D:/Pawang Code/Diabetic Retinopathy/dataset"
-book = xls.Workbook('D:/Pawang Code/Diabetic Retinopathy/featureExtraction1.xlsx')
+path_dataset = "E:/Pawang Code/Diabetic Retinopathy/dataset"
+book = xls.Workbook('E:/Pawang Code/Diabetic Retinopathy/featureExtraction3.xlsx')
 sheet = book.add_worksheet()
 sheet.write(0, 0, 'Image')
 column = 1
@@ -25,22 +26,18 @@ column += 1
 row = 1
 
 def preprocessing(img):
-    img = cv2.resize(img, (500, 500)) # Resize image
-    green = img[:, :, 1] # Get green channel
-    incomplement = cv2.bitwise_not(green) # negative image
-    clache = cv2.createCLAHE(clipLimit=5) # Contrast Limited Adaptive Histogram Equalization
-    cl1 = clache.apply(incomplement) # Apply CLAHE
-    mopopen = morph.opening(cl1, morph.disk(8, dtype=np.uint8)) # Morphological opening with disk kernel of radius 8
-    godisk = cl1 - mopopen #remove optical disk
-    medfilt = filters.median(godisk) # Median filter
-    background = morph.opening(medfilt, morph.disk(15, dtype=np.uint8)) #get background
-    rmBack = medfilt - background #remove background
-    v_min, v_max = np.percentile(rmBack, (0.2, 99.8)) #get 0.2% and 99.8% percentile
-    better_contrast = exposure.rescale_intensity(rmBack, in_range=(v_min, v_max)) #rescale intensity
-    ret, thresh = cv2.threshold(better_contrast, 0, 255, cv2.THRESH_BINARY+cv2.THRESH_OTSU) #Otsu thresholding
-    rmSmall = morph.remove_small_objects(thresh, min_size=50, connectivity=1, in_place=False) #remove small objects
+    gray = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
+    ret, mg = cv2.threshold(gray, 10, 255, cv2.THRESH_BINARY_INV)
+    reverse = cv2.bitwise_not(mg)
+    contours, hierarchy = cv2.findContours(reverse, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    select = max(contours, key=cv2.contourArea)
+    x, y, w, h = cv2.boundingRect(select)
+    png = img[y:y+h, x:x+w]
+    png = cv2.resize(png, (500, 500))
+    green = png[:, :, 1]
+    # clahe = exposure.equalize_adapthist(green, clip_limit=0.03)
 
-    return rmSmall
+    return green
 
 def glcm(img):
     distance = [5]
@@ -49,8 +46,8 @@ def glcm(img):
     symetric = True
     normed = True
 
-    glcm = greycomatrix(img, distance, angles, level, symmetric=symetric, normed=normed)
-    glcm_props = [property for name in glcm_feature for property in greycoprops(glcm, name)[0]]
+    glcm = graycomatrix(img, distance, angles, level, symmetric=symetric, normed=normed)
+    glcm_props = [property for name in glcm_feature for property in graycoprops(glcm, name)[0]]
 
     return glcm_props
 
