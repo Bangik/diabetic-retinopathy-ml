@@ -10,4 +10,4 @@ In order to obtain high accuracy, in this project there are blood vessels, micro
 
 ## Contributing
 
-Bebas bagi siapa saja yang ingin berkontribusi pada proyek ini, silakan fork repositori ini
+Fell free for anyone who wants to contribute to this project please fork this repository
