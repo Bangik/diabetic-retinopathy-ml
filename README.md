@@ -10,4 +10,4 @@ In order to obtain high accuracy, in this project there are blood vessels, micro
 
 ## Contributing
 
-Fell free for anyone who wants to contribute to this project please fork this repository
+Fell free for anyone who wants to contribute to this project please read the [CONTRIBUTING.MD](https://github.com/Bangik/diabetic-retinopathy-ml/blob/master/CONTRIBUTING.md) and [LEARN.MD](https://github.com/Bangik/diabetic-retinopathy-ml/blob/master/LEARN.md)
