@@ -10,8 +10,8 @@ from skimage.feature import graycomatrix, graycoprops
 import skimage.feature as feature
 import os
 
-path_dataset = "E:/Pawang Code/Diabetic Retinopathy/dataset_filter"
-book = xls.Workbook('E:/Pawang Code/Diabetic Retinopathy/featureExtraction3.xlsx')
+path_dataset = "E:/Pawang Code/Diabetic Retinopathy/dataset"
+book = xls.Workbook('E:/Pawang Code/Diabetic Retinopathy/featureExtraction4.xlsx')
 sheet = book.add_worksheet()
 sheet.write(0, 0, 'Image')
 column = 1
@@ -74,9 +74,9 @@ def preprocessing(img):
     # green = png[:, :, 1]
     # clahe = exposure.equalize_adapthist(green, clip_limit=0.03)
     green = img[:,:,1]
-    # incomplement = cv2.bitwise_not(green) # negative image
+    incomplement = cv2.bitwise_not(green) # negative image
     clache = cv2.createCLAHE(clipLimit=5) # Contrast Limited Adaptive Histogram Equalization
-    cl1 = clache.apply(green) # Apply CLAHE
+    cl1 = clache.apply(incomplement) # Apply CLAHE
 
     return cl1
 
@@ -114,7 +114,7 @@ for folder in os.listdir(path_dataset):
         column += 1
 
         row += 1
-        if i == 99:
-            break
+        # if i == 99:
+        #     break
 
 book.close()
