@@ -86,6 +86,7 @@ def extract_bv(image):
     mask = (retina > t0)
     vessels = filters.sato(retina, sigmas=range(1, 10)) * mask
     thresholded = filters.apply_hysteresis_threshold(vessels, 0.01, 0.03)
+    return thresholded
 
 def glcm(img):
     distance = [5]
