@@ -11,7 +11,7 @@ import skimage.feature as feature
 import os
 
 path_dataset = "E:/Pawang Code/Diabetic Retinopathy/dataset"
-book = xls.Workbook('E:/Pawang Code/Diabetic Retinopathy/featureExtractionbv.xlsx')
+book = xls.Workbook('E:/Pawang Code/Diabetic Retinopathy/featureExtractionbvsato.xlsx')
 sheet = book.add_worksheet()
 sheet.write(0, 0, 'Image')
 column = 1
