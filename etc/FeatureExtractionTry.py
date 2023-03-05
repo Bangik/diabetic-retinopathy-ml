@@ -1,7 +1,5 @@
-from time import time
 import cv2
 import numpy as np
-from pyparsing import col
 import skimage.morphology as morph
 import skimage.filters as filters
 import skimage.exposure as exposure
